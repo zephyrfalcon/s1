@@ -8,7 +8,8 @@
 
 (define *fields* '()) ;; fields in the current line
 
-(define fs #f)        ;; field separator; if undefined, use whitespace
+(define fs #/[ \n\t\r]+/) ;; field separator; if undefined, use whitespace
+
 (define ls "\n")      ;; line separator; if undefined, use newline
 (define ofs " ")      ;; output file separator
 (define ols "\n")     ;; output line separator
@@ -74,6 +75,7 @@
 
 (define (process-line line exprs)
   (set! *current-line* line)
+  (set! *fields* (string-split line fs))
   ;; also set *fields*, etc
   (process-exprs exprs))
 
