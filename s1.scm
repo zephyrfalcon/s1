@@ -1,5 +1,7 @@
 ;; s1.scm
 
+(use gauche.parseopt)
+
 ;;; --- special variables ---
 
 (define *fields* '()) ;; fields in the current line
@@ -16,7 +18,6 @@
       (port->string port))))
 
 (define (split-data data)
-  ;; split data using LS
   (string-split data ls))
 
 (define (process-line output-port line)
@@ -29,9 +30,12 @@
     (for-each (cut process-line output-port <>) lines)))
 
 (define (main args)
-  ;; for now, use stdin by default
-  (process-file (current-input-port)))
-
+  (let-args (cdr args)
+            ((expr     "e|expr")
+             (filename "f|filename")
+             . restargs)
+            ;; for now, use stdin by default
+            (process-file (current-input-port))))
 
 #|
 proposed command line options:
