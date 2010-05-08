@@ -3,22 +3,29 @@
 (use gauche.parseopt)
 (load "./core")
 
+(define (determine-exprs expr-src filename)
+  (cond
+   ((string? expr-src)
+    (read-exprs-from-string expr-src))
+   ((string? filename)
+    ...)
+   (else (list default-expr))))
+
 (define (main args)
   (let-args
    (cdr args)
-   ((expr-src "e|expr")
-    (filename "f|filename")
+   ((expr-src "e|expr=s")
+    (filename "f|filename=s")
     . restargs)
    (begin
-     (unless (or expr-src filename)
-       (set! expr-src (list default-expr)))
-     ;; XXX refactor:
-     (receive (before-exprs after-exprs exprs)
-         (parse-exprs expr-src)
-       (process-exprs before-exprs)
-       (process-file (current-input-port) exprs) ;; use stdin for now
-       (process-exprs after-exprs))
-     0)))
+     (let ((exec-exprs (determine-exprs expr-src filename)))
+       ;; XXX refactor:
+       (receive (before-exprs after-exprs exprs)
+           (parse-exprs exec-exprs)
+         (process-exprs before-exprs)
+         (process-file (current-input-port) exprs) ;; use stdin for now
+         (process-exprs after-exprs))
+       0))))
 
 #|
 proposed command line options:

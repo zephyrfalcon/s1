@@ -58,6 +58,10 @@
   (with-input-from-port port
     (lambda () (port->string port))))
 
+(define (read-exprs-from-string s)
+  (with-input-from-string s
+    (lambda () (port->sexp-list (current-input-port)))))
+
 (define (process-exprs exprs)
   ;; evaluate a list of expressions.
   (for-each (cut eval <> #f) exprs))
