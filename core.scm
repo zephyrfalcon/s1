@@ -4,6 +4,8 @@
 
 ;;; --- special variables ---
 
+(define *debug* #f)
+
 (define *current-line* #f)
 
 (define *fields* '()) ;; fields in the current line
@@ -76,6 +78,8 @@
 (define (process-line line exprs)
   (set! *current-line* line)
   (set! *fields* (string-split line fs))
+  (when *debug*
+    (format (standard-error-port) "~s~%" *fields*))
   ;; also set *fields*, etc
   (process-exprs exprs))
 
@@ -86,11 +90,16 @@
 
 ;;; --- fields ---
 
+(define (safe-field-get n)
+  (if (> n (length *fields*))
+      ""
+      (list-ref *fields* (- n 1))))
+
 (define (field n)
   (cond
    ((= n 0) *current-line*)
-   ((> n 0) (list-ref *fields* (- n 1)))
-   (else ...)))
+   ((> n 0) (safe-field-get n))
+   (else (safe-field-get (+ (+ (length *fields*) 1) n)))))
 
 ;;; --- output ---
 
