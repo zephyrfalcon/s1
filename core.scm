@@ -1,5 +1,7 @@
 ;; core.scm
 
+(load "./tools")
+
 ;;; --- special variables ---
 
 (define *current-line* #f)
@@ -79,3 +81,22 @@
   (let* ((data (read-data port))
          (lines (string-split data ls)))
     (for-each (cut process-line <> exprs) lines)))
+
+;;; --- fields ---
+
+(define (field n)
+  (cond
+   ((= n 0) *current-line*)
+   ((> n 0) (list-ref *fields* (- n 1)))
+   (else ...)))
+
+;;; --- output ---
+
+(define (out . args)
+  (print-out ofs ols args))
+
+(define (print-out ofs ols args)
+  (let* ((args-as-strings (map ->string args))
+         (s (string-join args-as-strings ofs)))
+    (display s)
+    (display ols)))
