@@ -8,7 +8,7 @@
    ((string? expr-src)
     (read-exprs-from-string expr-src))
    ((string? filename)
-    ...)
+    (read-exprs-from-file filename))
    (else (list default-expr))))
 
 (define (main args)

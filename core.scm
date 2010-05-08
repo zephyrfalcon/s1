@@ -62,6 +62,10 @@
   (with-input-from-string s
     (lambda () (port->sexp-list (current-input-port)))))
 
+(define (read-exprs-from-file filename)
+  (with-input-from-file filename
+    (lambda () (port->sexpr-list (current-input-port)))))
+
 (define (process-exprs exprs)
   ;; evaluate a list of expressions.
   (for-each (cut eval <> #f) exprs))
