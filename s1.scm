@@ -4,6 +4,8 @@
 
 ;;; --- special variables ---
 
+(define *current-line* #f)
+
 (define *fields* '()) ;; fields in the current line
 
 (define fs #f)        ;; field separator; if undefined, use whitespace
@@ -11,31 +13,79 @@
 (define ofs " ")      ;; output file separator
 (define ols "\n")     ;; output line separator
 
+(define default-expr
+  '(format #t "~a~%" *current-line*))
+
+(define (is-before-expr? expr)
+  (and (list? expr)
+       (not (null? expr))
+       (member (car expr) '(b before B BEFORE))))
+
+(define (is-after-expr? expr)
+  (and (list? expr)
+       (not (null? expr))
+       (member (car expr) '(a after A AFTER))))
+
+(define (parse-exprs sexprs)
+  (let loop ((sexprs sexprs) (before-exprs '()) (after-exprs '()) (exprs '()))
+    (cond
+     ((null? sexprs) ;; done?
+      (values (reverse before-exprs)
+              (reverse after-exprs)
+              (reverse exprs)))
+
+     ((is-before-expr? (car sexprs))
+      (loop (cdr sexprs)
+            (cons (car sexprs) before-exprs)
+            after-exprs
+            exprs))
+
+     ((is-after-expr? (car sexprs))
+      (loop (cdr sexprs)
+            before-exprs
+            (cons (car sexprs) after-exprs)
+            exprs))
+
+     (else (loop (cdr sexprs)
+                 before-exprs after-exprs (cons (car sexprs) exprs))))))
+
 (define (read-data port)
   ;; read all data from the port, and return it as a string.
   (with-input-from-port port
-    (lambda ()
-      (port->string port))))
+    (lambda () (port->string port))))
 
 (define (split-data data)
   (string-split data ls))
 
-(define (process-line output-port line)
-  (format output-port "~a~%" line))
+(define (process-exprs exprs)
+  ;; evaluate a list of expressions.
+  (for-each (cut eval <> #f) exprs))
 
-(define (process-file port)
+(define (process-line line exprs)
+  (set! *current-line* line)
+  ;; also set *fields*, etc
+  (process-exprs exprs))
+
+(define (process-file port exprs)
   (let* ((data (read-data port))
-         (lines (split-data data))
-         (output-port (current-output-port)))
-    (for-each (cut process-line output-port <>) lines)))
+         (lines (split-data data)))
+    (for-each (cut process-line <> exprs) lines)))
 
 (define (main args)
-  (let-args (cdr args)
-            ((expr     "e|expr")
-             (filename "f|filename")
-             . restargs)
-            ;; for now, use stdin by default
-            (process-file (current-input-port))))
+  (let-args
+   (cdr args)
+   ((expr-src "e|expr")
+    (filename "f|filename")
+    . restargs)
+   (begin
+     (unless (or expr-src filename)
+       (set! expr-src (list default-expr)))
+     (receive (before-exprs after-exprs exprs)
+         (parse-exprs expr-src)
+       (process-exprs before-exprs)
+       (process-file (current-input-port) exprs) ;; use stdin for now
+       (process-exprs after-exprs))
+     0)))
 
 #|
 proposed command line options:
