@@ -19,16 +19,19 @@
   ;; split data using LS
   (string-split data ls))
 
-(define (write-data port)
-  ...)
+(define (process-line output-port line)
+  (format output-port "~a~%" line))
+
+(define (process-file port)
+  (let* ((data (read-data port))
+         (lines (split-data data))
+         (output-port (current-output-port)))
+    (for-each (cut process-line output-port <>) lines)))
 
 (define (main args)
-  (print "Hello world!")
-  (print args)
-  (print *argv*))
+  ;; for now, use stdin by default
+  (process-file (current-input-port)))
 
-;; read data from stdin
-;; write data to stdout
 
 #|
 proposed command line options:
