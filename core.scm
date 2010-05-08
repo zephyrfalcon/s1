@@ -26,12 +26,16 @@
        (not (null? expr))
        (member (car expr) '(a after A AFTER))))
 
+(define (normalize-before/after-expr expr)
+  ;; replace (BEFORE ...) with (begin ...), etc.
+  (cons 'begin (cdr expr)))
+
 (define (parse-exprs sexprs)
   (let loop ((sexprs sexprs) (before-exprs '()) (after-exprs '()) (exprs '()))
     (cond
      ((null? sexprs) ;; done?
-      (values (reverse before-exprs)
-              (reverse after-exprs)
+      (values (reverse (map normalize-before/after-expr before-exprs))
+              (reverse (map normalize-before/after-expr after-exprs))
               (reverse exprs)))
 
      ((is-before-expr? (car sexprs))
@@ -54,9 +58,6 @@
   (with-input-from-port port
     (lambda () (port->string port))))
 
-(define (split-data data)
-  (string-split data ls))
-
 (define (process-exprs exprs)
   ;; evaluate a list of expressions.
   (for-each (cut eval <> #f) exprs))
@@ -68,5 +69,5 @@
 
 (define (process-file port exprs)
   (let* ((data (read-data port))
-         (lines (split-data data)))
+         (lines (string-split data ls)))
     (for-each (cut process-line <> exprs) lines)))
