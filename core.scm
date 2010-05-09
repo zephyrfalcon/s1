@@ -42,7 +42,7 @@
      ((null? sexprs) ;; done?
       (values (reverse (map normalize-before/after-expr before-exprs))
               (reverse (map normalize-before/after-expr after-exprs))
-              (reverse exprs)))
+              (reverse (map replace-$-syntax exprs))))
 
      ((is-before-expr? (car sexprs))
       (loop (cdr sexprs)
