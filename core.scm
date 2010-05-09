@@ -1,5 +1,6 @@
 ;; core.scm
 
+(use srfi-13)
 (load "./tools")
 
 ;;; --- special variables ---
@@ -87,6 +88,28 @@
   (let* ((data (read-data port))
          (lines (string-split data ls)))
     (for-each (cut process-line <> exprs) lines)))
+
+;;; --- $ shorthand ---
+
+;; In Chicken I could define a reader macro to have $N mean (field N);
+;; this does not seem to work in Gauche, so we replace the appropriate
+;; symbols in expressions by hand. Kludgy, but it'll do for now.
+;; Because of this restriction, however, we only support ${number} and $nf.
+
+(define (replace-$-syntax expr)
+  (search-and-replace expr matches-$-syntax? convert-$-syntax))
+
+(define (matches-$-syntax? sym)
+  (if (symbol? sym)
+      (let ((s (symbol->string sym)))
+        (string-prefix? "$" s))
+      #f))
+
+(define (convert-$-syntax sym)
+  (let ((s (symbol->string sym)))
+    (if (equal? s "$nf")
+        '(field nf)
+        (list 'field (string->number (string-copy s 1))))))
 
 ;;; --- fields ---
 

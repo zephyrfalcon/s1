@@ -15,4 +15,9 @@
     (test* "before" '((begin (init this) (do that))) b)
     (test* "exprs" '((print (field 1))) e)))
 
+(test-section "$ replacement")
+(let ((expr '(when something (out $4))))
+  (test* "#1" '(when something (out (field 4)))
+         (replace-$-syntax expr)))
+
 (test-end)
