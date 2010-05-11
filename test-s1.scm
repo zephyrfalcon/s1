@@ -1,6 +1,7 @@
 ;; test-s1.scm
 
 (use gauche.test)
+(load "./tools.scm")
 (load "./core.scm")
 
 (test-start "s1")

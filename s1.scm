@@ -1,7 +1,17 @@
 ;; s1.scm
 
 (use gauche.parseopt)
-(load "./core")
+
+(define (abspath path)
+  (sys-normalize-pathname path :absolute #t :expand #t :canonicalize #t))
+
+;; load a file relative to the main program.
+(define (load-relative name)
+  (load name :paths
+        (list (sys-dirname (abspath *program-name*)))))
+
+(load-relative "tools")
+(load-relative "core")
 
 (define (determine-exprs expr-src filename)
   (cond

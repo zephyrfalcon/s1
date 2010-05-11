@@ -1,7 +1,6 @@
 ;; core.scm
 
 (use srfi-13)
-(load "./tools")
 
 ;;; --- special variables ---
 
