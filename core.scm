@@ -140,6 +140,21 @@
        (define name 0)
        (def rest ...)))))
 
+(define (?false? x)
+  (not (not (member x '(0 "" () 0.0 #f)))))
+
+(define-syntax ?
+  (syntax-rules ()
+    ((? cond true-expr false-expr)
+     (if (?false? cond)
+         false-expr
+         true-expr))
+    ((? cond true-expr)
+     (? cond true-expr #f))))
+
+;;; --- regular expressions ---
+
+
 
 ;;; --- output ---
 

@@ -20,4 +20,11 @@
   (test* "#1" '(when something (out (field 4)))
          (replace-$-syntax expr)))
 
+(test-section "? macro")
+(test* "0 is false?" #t (?false? 0))
+(test* "empty string is false?" #t (?false? ""))
+(test* "\"0\" is false?" #f (?false? "0"))
+
+(test* "? #1" 'bar (? "" 'foo 'bar))
+
 (test-end)
