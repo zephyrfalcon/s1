@@ -124,6 +124,23 @@
    ((> n 0) (safe-field-get n))
    (else (safe-field-get (+ (+ (length *fields*) 1) n)))))
 
+;;; --- macros ---
+
+(define-syntax def
+  (syntax-rules ()
+    ((def) #f)
+
+    ((def (name value) rest ...)
+     (begin
+       (define name value)
+       (def rest ...)))
+
+    ((def name rest ...)
+     (begin
+       (define name 0)
+       (def rest ...)))))
+
+
 ;;; --- output ---
 
 (define (out . args)
