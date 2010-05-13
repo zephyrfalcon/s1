@@ -161,7 +161,11 @@
 
 ;;; --- regular expressions ---
 
+(define (~ regex :optional (s #f))
+  (rxmatch regex (or s *current-line*)))
 
+(define (!~ regex :optional (s #f))
+  (not (~ regex s)))
 
 ;;; --- output ---
 
