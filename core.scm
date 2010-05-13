@@ -6,7 +6,7 @@
 
 (define *debug* #f)
 
-(define *current-line* #f)
+(define *current-line* #f) ;; current line being processed
 
 (define *fields* '()) ;; fields in the current line
 
@@ -15,6 +15,9 @@
 (define ls "\n")      ;; line separator; if undefined, use newline
 (define ofs " ")      ;; output file separator
 (define ols "\n")     ;; output line separator
+
+(define nf 0) ;; number of fields; set for each line
+(define nl 0) ;; number of lines in file; set when file is read
 
 ;;; --- handling Scheme expressions ---
 
@@ -78,6 +81,7 @@
 (define (process-line line exprs)
   (set! *current-line* line)
   (set! *fields* (string-split line fs))
+  (set! nf (length *fields*))
   (when *debug*
     (format (standard-error-port) "~s~%" *fields*))
   ;; also set *fields*, etc
@@ -86,6 +90,7 @@
 (define (process-file port exprs)
   (let* ((data (read-data port))
          (lines (string-split data ls)))
+    (set! nl (length lines))
     (for-each (cut process-line <> exprs) lines)))
 
 ;;; --- $ shorthand ---
@@ -150,6 +155,9 @@
          true-expr))
     ((? cond true-expr)
      (? cond true-expr #f))))
+
+(define (?out x)
+  (? x (out x)))
 
 ;;; --- regular expressions ---
 
