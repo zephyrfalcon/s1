@@ -2,16 +2,12 @@
 
 (use gauche.parseopt)
 
-(define (abspath path)
-  (sys-normalize-pathname path :absolute #t :expand #t :canonicalize #t))
+;; fix *load-path* so we can see files in the same directory :-/
+(push! *load-path*
+       (sys-dirname (sys-normalize-pathname *program-name* :absolute #t)))
 
-;; load a file relative to the main program.
-(define (load-relative name)
-  (load name :paths
-        (list (sys-dirname (abspath *program-name*)))))
-
-(load-relative "tools")
-(load-relative "core")
+(load "tools")
+(load "core")
 
 (define (determine-exprs expr-src filename)
   (cond
