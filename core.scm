@@ -23,6 +23,7 @@
 
 (define default-expr
   '(format #t "~a~%" *current-line*))
+  ;; FIXME: Should use ols?
 
 (define (is-before-expr? expr)
   (and (list? expr)

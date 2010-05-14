@@ -1,0 +1,3 @@
+# TODO
+
+- Read input from files if specified (currently only stdin is supported).

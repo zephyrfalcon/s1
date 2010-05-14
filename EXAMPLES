@@ -1,0 +1,22 @@
+# EXAMPLES
+#
+# Based on:
+# http://www.catonmat.net/blog/wp-content/uploads/2008/09/awk1line.txt
+# http://www.catonmat.net/blog/awk-one-liners-explained-part-one/
+
+(Examples assume input from stdin, and output to stdout, unless
+specified otherwise.)
+
+1. Double-space a file:
+
+  s1 -e '(out $0) (out "")'
+
+2. Remove empty lines:
+
+  s1 -e '(? $0 (out $0))'
+
+3. Double-space a file which already has blank lines in it. Output
+file should contain no more than one blank line between lines of text.
+
+  s1 -e '(? $0 (out $0) (out ""))'
+

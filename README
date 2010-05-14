@@ -1,0 +1,45 @@
+This is s1, an Awk-like tool for scripting, written in Scheme.
+
+Much like Awk, s1 can be used for quick manipulation of text, or
+throwaway scripts. Instead of providing a new language to do this, s1
+uses Scheme (Gauche Scheme, to be precise), enhanced with a number of
+functions and macros for commonly used tasks.
+
+REQUIREMENTS
+
+- Gauche 0.9 [http://practical-scheme.net/gauche/]
+
+- Unix-like system with a shell like bash, or similar. (On Windows,
+  Cygwin would probably work, but this is untested.)
+
+INSTALLATION
+
+- Gauche Scheme must be installed. More precisely, the 'gosh' shell
+  must be available on the command line.
+
+- Grab the s1 source from git:
+
+  $ git clone git://github.com/zephyrfalcon/s1.git
+
+- Put the resulting 's1' directory somewhere. For example, mine is in
+  ~/projects/github/s1.
+
+- For easy access, make an alias in your shell:
+
+  $ alias s1='gosh ~/projects/github/s1/s1.scm'
+
+  (using the actual path where you installed s1, of course). It is
+  recommended that you put this alias in your ~/.profile.
+
+USAGE
+
+Assuming the aforementioned alias has been defined, s1 is called like:
+
+  s1 [options] [files...]
+
+If no options or files are specified, s1 functions as a pipe, passing
+input from stdin unchanged to stdout. For example, `ls | s1` simply
+shows the contents of ls.
+
+
+{ ... more ... }
