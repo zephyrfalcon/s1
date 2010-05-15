@@ -1,0 +1,32 @@
+S1 QUICK REFERENCE
+------------------
+
+SPECIAL VARIABLES
+
+fs      Field separator; default is "whitespace"
+ls      Line separator; default is "\n"
+
+ofs     Output field separator; default is space " "
+ols     Output line separator; default is "\n"
+
+nf      Number of fields in the current line
+nl      Number of lines in the current file / input stream
+
+ln      Number of the current line (overall) 
+
+
+FUNCTIONS AND MACROS
+
+(field N)
+
+        Get the contents of the N-th field. Counting starts at 1. Field
+        0 is the whole line. Counting from the right is possible as
+        well; the rightmost/last item in the fields list is -1, the
+        item before that is -2, etc.
+
+$N
+
+        Shorthand for (field N). Due to the limitations of the reader,
+        only numbers are allowed, and $nf. In other words, N cannot be
+        a more complex expression; in that case, use 'field' instead.
+
