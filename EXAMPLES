@@ -20,3 +20,7 @@ file should contain no more than one blank line between lines of text.
 
   s1 -e '(? $0 (out $0) (out ""))'
 
+4. Display lines with the line number in front:
+
+  s1 -e '(out ln "\t" $0)'
+

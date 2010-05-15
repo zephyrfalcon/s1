@@ -18,6 +18,7 @@
 
 (define nf 0) ;; number of fields; set for each line
 (define nl 0) ;; number of lines in file; set when file is read
+(define ln 0) ;; number of the current line (overall)
 
 ;;; --- handling Scheme expressions ---
 
@@ -83,6 +84,7 @@
   (set! *current-line* line)
   (set! *fields* (string-split line fs))
   (set! nf (length *fields*))
+  (inc! ln)
   (when *debug*
     (format (standard-error-port) "~s~%" *fields*))
   ;; also set *fields*, etc
