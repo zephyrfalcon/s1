@@ -1,3 +1,9 @@
 # TODO
 
 - Read input from files if specified (currently only stdin is supported).
+
+- Keep separate line counter for each file being read, and maybe for
+  the number of each file.
+
+- Check if FORMAT is adequate for formatting floating point numbers
+  etc, or that we need an easier/shorter way to do this.

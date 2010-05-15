@@ -24,3 +24,12 @@ file should contain no more than one blank line between lines of text.
 
   s1 -e '(out ln "\t" $0)'
 
+5. Only number non-blank lines in a file:
+
+  s1 -e '(before (def c)) (? $0 (inc! c)) (? $0 (out c "\t" $0) (out $0))'
+  # TODO: should be MUCH shorter!
+
+6. Count the number of lines in a file:
+
+  s1 -e '(after (out nl))'
+
