@@ -7,3 +7,9 @@
 
 - Check if FORMAT is adequate for formatting floating point numbers
   etc, or that we need an easier/shorter way to do this.
+
+- There seems to be a bug when used with ack. Rather vague at the
+  moment; when piped through s1, we don't get quite as many results as
+  without it. Not sure why; there might be bogus characters (e.g. EOF)
+  in the data returned by ack.
+
