@@ -63,6 +63,7 @@
      (else (loop (cdr sexprs)
                  before-exprs after-exprs (cons (car sexprs) exprs))))))
 
+;; FIXME: stops when encountering characters like 0xFA
 (define (read-data port)
   ;; read all data from the port, and return it as a string.
   (with-input-from-port port
