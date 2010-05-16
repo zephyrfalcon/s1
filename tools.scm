@@ -11,3 +11,18 @@
           (replace-proc expr)
           expr)))
 
+;; read the complete contents of a file, and return it as one big string.
+;; (the more straightforward form, using with-input-from-file and port->string,
+;; does not seem to work.)
+(define (read-all-from-file filename :key (blocksize 1024))
+  (let ((p (open-input-file filename)))
+    (let ((data (read-all-from-port p :blocksize blocksize)))
+      (close-input-port p)
+      data)))
+
+(define (read-all-from-port port :key (blocksize 1024))
+  (let loop ((chunks '()))
+    (let ((chunk (read-block blocksize port)))
+      (if (eof-object? chunk)
+          (string-incomplete->complete (string-join (reverse chunks) ""))
+          (loop (cons chunk chunks))))))

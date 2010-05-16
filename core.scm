@@ -92,7 +92,7 @@
   (process-exprs exprs))
 
 (define (process-file port exprs)
-  (let* ((data (read-data port))
+  (let* ((data (read-all-from-port port))
          (lines (string-split data ls)))
     (set! nl (length lines))
     (for-each (cut process-line <> exprs) lines)))
