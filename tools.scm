@@ -24,5 +24,6 @@
   (let loop ((chunks '()))
     (let ((chunk (read-block blocksize port)))
       (if (eof-object? chunk)
-          (string-incomplete->complete (string-join (reverse chunks) ""))
+          ;; remove any "weird" characters
+          (string-incomplete->complete (string-join (reverse chunks) "") :omit)
           (loop (cons chunk chunks))))))
